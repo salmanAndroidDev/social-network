@@ -29,4 +29,3 @@ class Post(BaseModelMixin):
 
     def __str__(self):
         return self.title
-
