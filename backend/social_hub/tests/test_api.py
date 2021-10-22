@@ -69,8 +69,9 @@ class PrivateUserAPITest(TestCase):
         """Test to get list of following users posts"""
         u1, u2, u3 = create_followers(self.user)
         user2 = create_user(email='u2@gmail.com', password='asd!@#$')
+        Post.objects.create(user=self.user, title='2', body='1b',
+                            policy='public')
         Post.objects.create(user=u1, title='1', body='1b', policy='public')
-        Post.objects.create(user=self.user, title='2', body='1b', policy='public')
         Post.objects.create(user=user2, title='3', body='2b', policy='public')
         Post.objects.create(user=u2, title='4', body='3b', policy='public')
         Post.objects.create(user=u3, title='5', body='3b', policy='public')
@@ -78,7 +79,8 @@ class PrivateUserAPITest(TestCase):
         Post.objects.create(user=u3, title='7', body='3b', policy='private')
         users = list(self.user.following.values_list("id", flat=True))
         users.append(self.user.id)  # include current user posts
-        serializer = PostSerializer(Post.public.filter(user__id__in=users), many=True)
+        serializer = PostSerializer(Post.public.filter(user__id__in=users),
+                                    many=True)
 
         url = reverse('posts')
         response = self.client.get(url)

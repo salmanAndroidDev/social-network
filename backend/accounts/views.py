@@ -1,6 +1,5 @@
 from django.contrib.auth import get_user_model
-from rest_framework import generics, permissions, authentication, \
-    status, viewsets
+from rest_framework import generics, status
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -38,7 +37,7 @@ class ChangeStatusView(AuthenticationMixin, APIView):
         serializer = self.serializer_class(instance=request.user,
                                            data=request.POST)
         if serializer.is_valid():
-            user = serializer.save()
+            serializer.save()
             return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -76,7 +75,8 @@ class UnFollowAPIView(AuthenticationMixin, APIView):
         Contact.objects.filter(follow_from=request.user,
                                follow_to=user_to_unfollow).delete()
 
-        return Response({'message': 'success'}, status=status.HTTP_204_NO_CONTENT)
+        return Response({'message': 'success'},
+                        status=status.HTTP_204_NO_CONTENT)
 
 
 class FollowingListAPIView(AuthenticationMixin, generics.ListAPIView):

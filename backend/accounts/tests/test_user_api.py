@@ -180,7 +180,7 @@ class PrivateUserAPITest(TestCase):
         Contact.objects.create(follow_from=self.user, follow_to=user2)
         Contact.objects.create(follow_from=self.user, follow_to=user3)
         Contact.objects.create(follow_from=self.user, follow_to=user4)
-        serializer = UserSerializer(self.user.following.all(),many=True)
+        serializer = UserSerializer(self.user.following.all(), many=True)
 
         url = reverse('following')
         response = self.client.get(url)
